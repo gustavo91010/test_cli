@@ -51,3 +51,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build
       run: go build -v main.go
+      
+  docker:
+    needs: build # precisa de...
+    uses: ./.github/workflows/Docker.yml
