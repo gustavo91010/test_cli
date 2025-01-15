@@ -20,5 +20,5 @@ jobs:
         # registro no docker hub
           username: leonardosartorello
         # Password or personal access token used to log against the Docker registry
-          password: 123456
+          password: ${{ secrets.PASSWORD_DOCKER_HUB }}
           
