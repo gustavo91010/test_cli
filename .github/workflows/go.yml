@@ -7,7 +7,6 @@ on:
     branches: [ '*' ]
 
 jobs:
-
   test:
     runs-on: ${{ matrix.os }}
     env:
@@ -27,17 +26,19 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: ${{ matrix.go_version }}
+
+    - name: Set up Docker with Compose
+      uses: docker/setup-buildx-action@v2 # cria um aimagem que já vem com o docker compose
       
     - name: Build-DB
       run: docker-compose build
-      
+
     - name: Create-DB
       run: docker-compose up -d
 
     - name: Test
-      run: go test -v main_test.go 
-      
-  
+      run: go test -v main_test.go
+
   build:
     needs: test
     runs-on: ${{ matrix.os }}
