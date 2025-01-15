@@ -1,0 +1,45 @@
+name: Go
+
+on: #quando vai ser executado...
+  push: # quando acontece um push ou ym pull para alguma branch especifica  branches: [ Aula_1 
+    branches: [ '*' ]  # ou para qualquer branch, com o [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+
+jobs:
+
+  test: #executa os testes
+    runs-on: ${{ matrix.os }} # em um sistema ubuntu
+    strategy:
+      matrix:
+        go_version: ['1.18', '1.17', '>=1.18']
+        os: ['ubuntu-latest', 'ubuntu-18.04'] #Adicionando testes para utros sistemas
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go_version }} # ate aqui, ele faz a preparação da maquina para rodar o go
+
+    - name: Build-DB
+      run: docker-compose build # execura  o docker compose 
+      
+    - name: Create-DB
+      run: docker-compose up -d 
+
+    - name: Test
+      run: go test -v main_test.go #executa os testes uniatrios 
+      
+  
+  build:
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'ubuntu-18.04']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: go build -v main.go
