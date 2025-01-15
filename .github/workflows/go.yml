@@ -1,68 +1,50 @@
 name: Go
 
-on: #quando vai ser executado...
-  push: # quando acontece um push ou um pull para alguma branch específica
-    branches: [ '*' ]  # ou para qualquer branch, com o [ '*' ]
+on:
+  push:
+    branches: [ '*' ]
   pull_request:
     branches: [ '*' ]
 
 jobs:
 
-  test: # executa os testes
-    runs-on: ${{ matrix.os }} # em um sistema Ubuntu
+  test:
+    runs-on: ${{ matrix.os }}
+    env:
+      HOST: localhost
+      PORT: 5432
+      USER: root
+      PASSWORD: root
+      DBNAME: root
     strategy:
       matrix:
         go_version: ['1.18', '1.17', '>=1.18']
-        os: ['ubuntu-latest', 'ubuntu-24.04'] # Adicionando testes para outros sistemas
-
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v3
 
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: ${{ matrix.go_version }} # Preparação da máquina para rodar o Go
-
-    - name: Install Docker Compose # Adicionando a instalação do docker-compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip
-        pip3 install docker-compose
-
+        go-version: ${{ matrix.go_version }}
+      
     - name: Build-DB
-      run: docker-compose build # executa o docker-compose build
-      env: 
-        HOST: localhost
-        PORT: 5432
-        USER: root
-        PASSWORD: root
-        DBNAME: root
-
+      run: docker-compose build
+      
     - name: Create-DB
-      run: docker-compose up -d 
+      run: docker-compose up -d
 
     - name: Test
-      run: go test -v main_test.go # executa os testes unitários
+      run: go test -v main_test.go 
+      
   
   build:
     needs: test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'ubuntu-24.04']
-
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
-
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip
-        pip3 install docker-compose
-
+    - uses: actions/checkout@v3
     - name: Build
       run: go build -v main.go
