@@ -26,10 +26,12 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: ${{ matrix.go_version }}
+        
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
 
-    - name: Set up Docker with Compose
-      uses: docker/setup-buildx-action@v2 # cria um aimagem que já vem com o docker compose
-      
     - name: Build-DB
       run: docker-compose build
 
