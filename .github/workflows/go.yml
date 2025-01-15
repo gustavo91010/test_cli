@@ -31,7 +31,13 @@ jobs:
 
     - name: Build-DB
       run: docker-compose build # executa o docker-compose build
-      
+      env: 
+        HOST: localhost
+        PORT: 5432
+        USER: root
+        PASSWORD: root
+        DBNAME: root
+        
     - name: Create-DB
       run: docker-compose up -d 
 
