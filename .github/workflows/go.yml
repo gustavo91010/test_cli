@@ -52,7 +52,7 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.6.0
       with:
-        name: progama # optional, default is artifact
+        name: artefato_do_progama # optional, default is artifact
         path: main # qual qrquivo ele vai salvar para repassar
   
   docker:
