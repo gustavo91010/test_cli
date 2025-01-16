@@ -18,10 +18,9 @@ jobs:
       uses: docker/login-action@v3.3.0
       with:
         # registro no docker hub
-          username: gustavoDocker910 # gustavoDocker910
+          username: gustavodocker910 # gustavoDocker910
         # Password or personal access token used to log against the Docker registry
           password: ${{ secrets.PASSWORD_DOCKER_HUB }}
-
           # vai buildar e colocar a imagem em algum reposiotrio
     - name: Build and push Docker images
       uses: docker/build-push-action@v6.12.0
@@ -30,5 +29,5 @@ jobs:
         file: ./Dockerfile # caminho para o arquivo dockerfile
            
         push: true # colocar nossa imagem em algum lugar, no caso, no docker hub
-        tags: gustavoDocker910/go_cli:${{ github.ref_name }} # cria o nome e utiliza a branch atual com a varavel: ${{github.ref_name}}
+        tags: gustavodocker910/go_cli:${{ github.ref_name }} # cria o nome e utiliza a branch atual com a varavel: ${{github.ref_name}}
      
